@@ -6,7 +6,7 @@
 #    By: frodney <frodney@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/01 12:53:01 by frodney           #+#    #+#              #
-#    Updated: 2021/08/01 12:53:03 by frodney          ###   ########.fr        #
+#    Updated: 2021/08/01 22:51:23 by frodney          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ HEADERS_DIRECTORY = ./includes/
 HEADERS = $(addprefix $(HEADERS_DIRECTORY), $(HEADERS_LIST))
 
 SOURCES_DIRECTORY = ./sources/
-SOURCES_LIST = main.c utils.c draw.c read_file.c \
+SOURCES_LIST = main.c utils.c draw.c read_map.c \
 	
 SOURCES = $(addprefix $(SOURCES_DIRECTORY), $(SOURCES_LIST))
 
@@ -76,6 +76,10 @@ clean:
 	@rm -rf $(OBJECTS_DIRECTORY)
 	@echo "$(NAME): $(RED)$(OBJECTS_DIRECTORY) was deleted$(RESET)"
 	@echo "$(NAME): $(RED)object files were deleted$(RESET)"
+
+norm:
+	@$(MAKE) -sC $(LIBFT_DIRECTORY) norm
+	@norminette $(SOURCES_DIRECTORY)*.c $(HEADERS_DIRECTORY)*.h
 
 fclean: clean
 	@rm -f $(MINILIBX)

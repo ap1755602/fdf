@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fdf.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: frodney <frodney@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/01 22:50:16 by frodney           #+#    #+#             */
+/*   Updated: 2021/08/01 22:50:17 by frodney          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FDF_H
 # define FDF_H
 
@@ -8,33 +20,33 @@
 # include "libft.h"
 # include "mlx.h"
 
-typedef struct s_fdf
+typedef struct s_format
 {
 	void	*mlx;
-	void	*win;
+	void	*window;
 	int		width;
 	int		height;
 	int		zoom;
 	int		color;
-	int		**z_matrix;
+	int		**z_map;
 	float	angle;
-}	t_fdf;
+}	t_format;
 
 typedef struct s_coords
 {
+	int			z0;
+	int			z1;
 	float		x0;
 	float		y0;
 	float		x1;
 	float		y1;
-	int			z0;
-	int			z1;
 }	t_coords;
 
 int		main(int argc, char **argv);
-void	read_file(char *file_name, t_fdf *data);
+void	read_map(char *file_name, t_format *data);
 void	terminate(char const *s);
-void	draw_line(t_coords coords, t_fdf *data);
-void	draw(t_fdf *data);
+void	draw_line(t_coords coords, t_format *data);
+void	draw(t_format *data);
 float	maxfloat(float a, float b);
 float	modfloat(float i);
 
