@@ -6,7 +6,7 @@
 /*   By: frodney <frodney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/01 22:50:16 by frodney           #+#    #+#             */
-/*   Updated: 2021/08/01 22:50:17 by frodney          ###   ########.fr       */
+/*   Updated: 2021/08/02 14:24:57 by frodney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ typedef struct s_format
 	int		zoom;
 	int		color;
 	int		**z_map;
+	int		move_x;
+	int		move_y;
+	float	relief;
 	float	angle;
 }	t_format;
 
@@ -49,5 +52,6 @@ void	draw_line(t_coords coords, t_format *data);
 void	draw(t_format *data);
 float	maxfloat(float a, float b);
 float	modfloat(float i);
+int		input_deals(int key, t_format *fdf);
 
 #endif

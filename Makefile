@@ -6,38 +6,36 @@
 #    By: frodney <frodney@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/01 12:53:01 by frodney           #+#    #+#              #
-#    Updated: 2021/08/01 22:51:23 by frodney          ###   ########.fr        #
+#    Updated: 2021/08/02 14:38:52 by frodney          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fdf
 
 CC = gcc
-FLAGS = -Wall -Werror -Wextra -O3
-LIBRARIES = -lmlx -lm -lft -L$(LIBFT_DIRECTORY) -L$(MINILIBX_DIRECTORY) -framework OpenGL -framework AppKit
-INCLUDES = -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADERS) -I$(MINILIBX_HEADERS)
+FLAGS = -Wall -Werror -Wextra
+LIBRARIES = -lmlx -lm -lft -L$(LIBFT_DIR) -L$(MLX_DIR) -framework OpenGL -framework AppKit
+INCLUDES = -I$(HEADER_DIR) -I$(LIBFT_HEADER) -I$(MLX_HEADER)
 
-LIBFT = $(LIBFT_DIRECTORY)libft.a
-LIBFT_DIRECTORY = ./libft/
-LIBFT_HEADERS = $(LIBFT_DIRECTORY)includes/
+LIBFT = $(LIBFT_DIR)libft.a
+LIBFT_DIR = ./libft/
+LIBFT_HEADER = $(LIBFT_DIR)includes/
 
-MINILIBX = $(MINILIBX_DIRECTORY)libmlx.a
-MINILIBX_DIRECTORY = ./minilibx_macos/
-MINILIBX_HEADERS = $(MINILIBX_DIRECTORY)
+MLX = $(MLX_DIR)libmlx.a
+MLX_DIR = ./minilibx_macos/
+MLX_HEADER = $(MLX_DIR)
 
-HEADERS_LIST = fdf.h
+HEADER_DIR = ./includes/
+HEADER =  $(addprefix $(HEADER_DIR), fdf.h)
 
-HEADERS_DIRECTORY = ./includes/
-HEADERS = $(addprefix $(HEADERS_DIRECTORY), $(HEADERS_LIST))
+SRC_DIR = ./sources/
+SRC_LIST = main.c utils.c draw_map.c read_map.c \
 
-SOURCES_DIRECTORY = ./sources/
-SOURCES_LIST = main.c utils.c draw.c read_map.c \
-	
-SOURCES = $(addprefix $(SOURCES_DIRECTORY), $(SOURCES_LIST))
+SRC = $(SRC_DIR)/$(SRC_LIST)
 
-OBJECTS_DIRECTORY = objects/
-OBJECTS_LIST = $(patsubst %.c, %.o, $(SOURCES_LIST))
-OBJECTS	= $(addprefix $(OBJECTS_DIRECTORY), $(OBJECTS_LIST))
+OBJ_DIR = ./objects/
+OBJ_LIST = $(patsubst %.c, %.o, $(SRC_LIST))
+OBJ	= $(addprefix $(OBJ_DIR), $(OBJ_LIST))
 
 # COLORS
 
@@ -49,41 +47,40 @@ RESET = \033[0m
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(MINILIBX) $(OBJECTS_DIRECTORY) $(OBJECTS)
-	@$(CC) $(FLAGS) $(LIBRARIES) $(INCLUDES) $(OBJECTS) -o $(NAME)
+$(NAME): $(LIBFT) $(MLX) $(OBJ_DIR) $(OBJ)
+	@$(CC) $(LIBRARIES) $(INCLUDES) $(OBJ) -o $(NAME) #$(FLAGS)
 	@echo "\n$(NAME): $(GREEN)object files were created$(RESET)"
 	@echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
 
-$(OBJECTS_DIRECTORY):
-	@mkdir -p $(OBJECTS_DIRECTORY)
-	@echo "$(NAME): $(GREEN)$(OBJECTS_DIRECTORY) was created$(RESET)"
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
 
-$(OBJECTS_DIRECTORY)%.o : $(SOURCES_DIRECTORY)%.c $(HEADERS)
+$(OBJ_DIR)%.o : $(SRC_DIR)%.c $(HEADER)
 	@$(CC) $(FLAGS) -c $(INCLUDES) $< -o $@
 	@echo "$(GREEN).$(RESET)\c"
 
 $(LIBFT):
 	@echo "$(NAME): $(GREEN)Creating $(LIBFT)...$(RESET)"
-	@$(MAKE) -sC $(LIBFT_DIRECTORY)
+	@$(MAKE) -sC $(LIBFT_DIR)
 
-$(MINILIBX):
-	@echo "$(NAME): $(GREEN)Creating $(MINILIBX)...$(RESET)"
-	@$(MAKE) -sC $(MINILIBX_DIRECTORY)
+$(MLX):
+	@echo "$(NAME): $(GREEN)Creating $(MLX)...$(RESET)"
+	@$(MAKE) -sC $(MLX_DIR)
 
 clean:
-	@$(MAKE) -sC $(LIBFT_DIRECTORY) clean
-	@$(MAKE) -sC $(MINILIBX_DIRECTORY) clean
-	@rm -rf $(OBJECTS_DIRECTORY)
-	@echo "$(NAME): $(RED)$(OBJECTS_DIRECTORY) was deleted$(RESET)"
+	@$(MAKE) -sC $(LIBFT_DIR) clean
+	@$(MAKE) -sC $(MLX_DIR) clean
+	@rm -rf $(OBJ_DIR)
+	@echo "$(NAME): $(RED)$(OBJ_DIR) was deleted$(RESET)"
 	@echo "$(NAME): $(RED)object files were deleted$(RESET)"
 
 norm:
-	@$(MAKE) -sC $(LIBFT_DIRECTORY) norm
-	@norminette $(SOURCES_DIRECTORY)*.c $(HEADERS_DIRECTORY)*.h
+	@$(MAKE) -sC $(LIBFT_DIR) norm
+	@norminette $(SRC_DIR)*.c $(HEADER_DIR)*.h
 
 fclean: clean
-	@rm -f $(MINILIBX)
-	@echo "$(NAME): $(RED)$(MINILIBX) was deleted$(RESET)"
+	@rm -f $(MLX)
+	@echo "$(NAME): $(RED)$(MLX) was deleted$(RESET)"
 	@rm -f $(LIBFT)
 	@echo "$(NAME): $(RED)$(LIBFT) was deleted$(RESET)"
 	@rm -f $(NAME)
@@ -92,3 +89,14 @@ fclean: clean
 re:
 	@$(MAKE) fclean
 	@$(MAKE) all
+
+gc:
+	@$(MAKE) fclean
+	@git add .
+	@git commit -m "fast commit"
+	@echo "$(GREEN)commit was commited$(RESET)"
+
+gp:
+	@$(MAKE) gc
+	@git push
+	@echo "$(GREEN)fast commit was pushed$(RESET)"
